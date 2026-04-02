@@ -1,7 +1,17 @@
 from docx import Document
 import os
 import requests
-from config import KIMI_API_TOKEN, PERSONAL_INFO, INPUT_FOLDER, OUTPUT_FOLDER
+
+# 配置导入：优先从项目根目录导入，失败时尝试添加路径
+try:
+    from config import KIMI_API_TOKEN, PERSONAL_INFO, INPUT_FOLDER, OUTPUT_FOLDER
+except ImportError:
+    import sys
+    # 添加项目根目录到路径（支持从子目录运行）
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if project_root not in sys.path:
+        sys.path.insert(0, project_root)
+    from config import KIMI_API_TOKEN, PERSONAL_INFO, INPUT_FOLDER, OUTPUT_FOLDER
 
 # ===================== 配置已移至config.py，无需在此处修改 =====================
 

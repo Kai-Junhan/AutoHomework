@@ -76,10 +76,28 @@ cd AutoAssignment
 ### 2. 安装依赖
 
 ```bash
+pip install -r requirements.txt
+```
+
+或者手动安装：
+
+```bash
 pip install python-docx requests
 ```
 
-### 3. 验证安装
+### 3. 配置项目
+
+1. 复制配置文件模板：
+   ```bash
+   cp config.example.py config.py
+   ```
+   （Windows 使用：`copy config.example.py config.py`）
+
+2. 编辑 `config.py`，填写你的信息：
+   - **KIMI_API_TOKEN**: 从 [月之暗面开放平台](https://platform.moonshot.cn/) 获取
+   - **PERSONAL_INFO**: 填写你的姓名、学号、专业班级等
+
+### 4. 验证安装
 
 ```bash
 python -c "from assignment_auto.assignment_auto import batch_process_all; print('安装成功')"
@@ -139,38 +157,16 @@ OUTPUT_FOLDER = "output"   # 输出文件夹名称
 
 ### 4.2 运行程序
 
-**重要提示**：由于项目采用模块化设计，需要在项目根目录运行脚本，并设置 `PYTHONPATH` 环境变量。
-
-#### Windows (PowerShell)
-
-```powershell
-$env:PYTHONPATH = "."
-python assignment_auto/assignment_auto.py
-```
-
-#### Windows (CMD)
-
-```cmd
-set PYTHONPATH=.
-python assignment_auto/assignment_auto.py
-```
-
-#### macOS / Linux
-
-```bash
-export PYTHONPATH=.
-python assignment_auto/assignment_auto.py
-```
+**重要提示**：必须在项目根目录（`AutoAssignment/` 文件夹）运行脚本。
 
 #### 处理普通作业
 
 ```bash
-# Windows PowerShell
-$env:PYTHONPATH = "."; python assignment_auto/assignment_auto.py
-
-# 或分步执行
-$env:PYTHONPATH = "."
+# Windows
 python assignment_auto/assignment_auto.py
+
+# macOS / Linux
+python3 assignment_auto/assignment_auto.py
 ```
 
 **适用场景**：
@@ -181,8 +177,11 @@ python assignment_auto/assignment_auto.py
 #### 处理实验报告
 
 ```bash
-# Windows PowerShell
-$env:PYTHONPATH = "."; python experiment_auto/experiment_auto.py
+# Windows
+python experiment_auto/experiment_auto.py
+
+# macOS / Linux
+python3 experiment_auto/experiment_auto.py
 ```
 
 **适用场景**：
