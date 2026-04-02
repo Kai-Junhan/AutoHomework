@@ -1,17 +1,42 @@
 from docx import Document
 import os
 import requests
+import sys
 
-# 配置导入：优先从项目根目录导入，失败时尝试添加路径
-try:
-    from config import KIMI_API_TOKEN, PERSONAL_INFO, INPUT_FOLDER, OUTPUT_FOLDER
-except ImportError:
-    import sys
-    # 添加项目根目录到路径（支持从子目录运行）
-    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    if project_root not in sys.path:
-        sys.path.insert(0, project_root)
-    from config import KIMI_API_TOKEN, PERSONAL_INFO, INPUT_FOLDER, OUTPUT_FOLDER
+# 智能导入配置：自动查找项目根目录
+def _import_config():
+    """自动查找并导入配置文件"""
+    # 获取当前脚本所在目录
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # 尝试从当前目录导入（如果config.py在同一目录）
+    try:
+        from config import KIMI_API_TOKEN, PERSONAL_INFO, INPUT_FOLDER, OUTPUT_FOLDER
+        return KIMI_API_TOKEN, PERSONAL_INFO, INPUT_FOLDER, OUTPUT_FOLDER
+    except ImportError:
+        pass
+    
+    # 尝试从父目录导入（标准项目结构）
+    parent_dir = os.path.dirname(current_dir)
+    if parent_dir not in sys.path:
+        sys.path.insert(0, parent_dir)
+    try:
+        from config import KIMI_API_TOKEN, PERSONAL_INFO, INPUT_FOLDER, OUTPUT_FOLDER
+        return KIMI_API_TOKEN, PERSONAL_INFO, INPUT_FOLDER, OUTPUT_FOLDER
+    except ImportError:
+        pass
+    
+    # 如果都找不到，报错并提示
+    raise ImportError(
+        "无法找到 config.py 配置文件。\n"
+        "请确保：\n"
+        "1. 已复制 config.example.py 为 config.py\n"
+        "2. config.py 位于项目根目录或脚本同目录\n"
+        "3. 已正确填写配置信息"
+    )
+
+# 导入配置
+KIMI_API_TOKEN, PERSONAL_INFO, INPUT_FOLDER, OUTPUT_FOLDER = _import_config()
 
 # ===================== 配置已移至config.py，无需在此处修改 =====================
 
