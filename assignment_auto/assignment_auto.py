@@ -1,8 +1,6 @@
-# sk-lnuxYC2pPFLsK8sxE5KwOBXBDeNiqzckcITqN2xcfV4kHbs2
 from docx import Document
 import os
 import requests
-# 新增：从config.py导入配置
 from config import KIMI_API_TOKEN, PERSONAL_INFO, INPUT_FOLDER, OUTPUT_FOLDER
 
 # ===================== 配置已移至config.py，无需在此处修改 =====================
@@ -33,7 +31,7 @@ STRICT RULES (MUST FOLLOW):
 1. Answer must be SPECIFIC and ACCURATE, NO vague words like "several/some/many".
 2. NO duplicate content, one answer only for one question.
 3. If you can't answer with pure text, return EMPTY STRING directly, no any words.
-4. Keep professional, fit college homework, no redundant words."""
+4. Keep professional, fit for college assignments, no redundant words."""
 
     if is_image:
         return ""
@@ -74,7 +72,7 @@ def has_image(paragraph):
         return False
 
 def is_question(pure_text):
-    """100%识别题目，覆盖所有题号格式"""
+    """识别题目，覆盖常见题号格式"""
     if len(pure_text) < 5:
         return False
     if pure_text[0].isdigit():
@@ -99,7 +97,7 @@ def is_invalid_answer(answer, question):
     return False
 
 def fill_personal_info_precise(doc):
-    """核心重构：精准填充个人信息，按你的要求1:1对齐空格，100%填充成功"""
+    """精准填充个人信息，对齐空格格式"""
     for para in doc.paragraphs:
         para_text = para.text.strip()
         if "Date：" in para_text and "Major" in para_text and "Class" in para_text:
@@ -153,7 +151,7 @@ def batch_process_all():
     doc_files = [f for f in os.listdir(INPUT_FOLDER) if f.endswith(".docx")]
     
     if not doc_files:
-        print(f"⚠️ 【{INPUT_FOLDER}】文件夹中未找到任何.docx格式的作业文档，请检查！")
+        print(f"⚠️ 【{INPUT_FOLDER}】文件夹中未找到任何.docx格式的文档，请检查！")
         return
     
     print(f"📂 检测到{len(doc_files)}个待处理作业，开始批量处理（已填充个人信息）...\n" + "-"*80 + "\n")

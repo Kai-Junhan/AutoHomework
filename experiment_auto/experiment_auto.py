@@ -1,8 +1,6 @@
-# sk-lnuxYC2pPFLsK8sxE5KwOBXBDeNiqzckcITqN2xcfV4kHbs2
 from docx import Document
 import os
 import requests
-# 新增：从config.py导入配置
 from config import KIMI_API_TOKEN, PERSONAL_INFO, INPUT_FOLDER, OUTPUT_FOLDER
 
 # ===================== 配置已移至config.py，无需在此处修改 =====================
@@ -32,7 +30,7 @@ def clean_answer(answer):
     return "\n".join(cleaned_lines).strip()
 
 def get_kimi_result(full_requirements, core_project):
-    """修复：强制4个分点+提高token上限+校验正确性+规范格式"""
+    """生成实验结果，强制4个分点，校验正确性"""
     prompt = f"""You are a professional JavaScript teaching assistant. Generate the EXPERIMENT RESULTS in ENGLISH.
 STRICT RULES (MUST FOLLOW):
 1. EXACTLY 4 points, numbered 1. 2. 3. 4. ONLY, NO EXTRA POINTS.
@@ -63,7 +61,7 @@ EXPERIMENT RESULTS (1. 2. 3. 4. ONLY):"""
         return ""
 
 def get_kimi_conclusion(full_requirements, core_project):
-    """修复：严格限制80词内，不超标 + 新增后验字数校验"""
+    """生成实验结论，严格限制80词以内"""
     prompt = f"""You are a professional JavaScript teaching assistant. Write a CONCLUSION in ENGLISH, NO MORE THAN 80 WORDS.
 STRICT RULES:
 1. Include: 1) What you learned about {core_project}; 2) A small code problem; 3) How you fixed it.
@@ -122,10 +120,10 @@ def extract_requirements_and_core_project(doc):
     
     for para in doc.paragraphs:
         para_text = para.text.strip()
-        if "2. Requirements" in para_text or "Requirements" in para_text and "2." in para_text:
+        if ("2. Requirements" in para_text) or ("Requirements" in para_text and "2." in para_text):
             in_requirements = True
             continue
-        if "3. Result" in para_text or "Result" in para_text and "3." in para_text:
+        if ("3. Result" in para_text) or ("Result" in para_text and "3." in para_text):
             break
         if in_requirements and para_text:
             full_requirements += para_text + "\n"
@@ -139,7 +137,7 @@ def extract_requirements_and_core_project(doc):
     return full_requirements[:3000], core_project
 
 def locate_and_fill(doc, full_requirements, core_project):
-    """修复：只取前4个分点，多余的直接丢弃"""
+    """定位并填充实验结果和结论，只取前4个分点"""
     print(f"  核心项目：{core_project}")
     print("  正在生成实验Result...")
     result_content = get_kimi_result(full_requirements, core_project)
@@ -167,10 +165,10 @@ def locate_and_fill(doc, full_requirements, core_project):
     in_conclusion = False
     for para in doc.paragraphs:
         para_text = para.text.strip()
-        if "3. Result" in para_text or "Result" in para_text and "3." in para_text:
+        if ("3. Result" in para_text) or ("Result" in para_text and "3." in para_text):
             in_result = True
             continue
-        if "4. Conclusion" in para_text or "Conclusion" in para_text and "4." in para_text:
+        if ("4. Conclusion" in para_text) or ("Conclusion" in para_text and "4." in para_text):
             in_result = False
             in_conclusion = True
             continue
