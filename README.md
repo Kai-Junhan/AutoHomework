@@ -21,7 +21,7 @@
 
 ## 项目简介
 
-AutoAssignment 是一个自动化文档处理工具，专为高校学生设计，用于快速完成前端课程作业和 JavaScript 实验报告。
+AutoAssignment 是一个自动化文档处理工具，专为高校学生设计，用于快速完成前端课程作业和 JavaScript 实验报告。（实际作者不想写作业哈）
 
 ### 主要功能
 
@@ -74,12 +74,6 @@ cd AutoAssignment
 ```
 
 ### 2. 安装依赖
-
-```bash
-pip install -r requirements.txt
-```
-
-或者手动安装：
 
 ```bash
 pip install python-docx requests
